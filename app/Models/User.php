@@ -52,7 +52,13 @@ class User extends Authenticatable implements JWTSubject
         ];
     }
 
-        // Rest omitted for brevity
+    /**
+     * Relación con el taller mecánico
+     */
+    public function mechanicalWorkshop()
+    {
+        return $this->hasOne(Mechanicals::class, 'users_id', 'users_id');
+    }
 
     /**
      * Get the identifier that will be stored in the subject claim of the JWT.

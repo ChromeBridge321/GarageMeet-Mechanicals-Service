@@ -2,23 +2,16 @@
 
 namespace App\Http\Controllers;
 
-
 use Illuminate\Support\Facades\Auth;
-use App\Http\Controllers\Controller;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
 use Illuminate\Http\Response;
 use App\Models\User;
+use Tymon\JWTAuth\Facades\JWTAuth;
 
 class AuthController extends Controller
 {
-    /**
-     * Create a new AuthController instance.
-     *
-     * @return void
-     */
-
     public function retornar()
     {
         return response()->json('hola');
@@ -32,11 +25,35 @@ class AuthController extends Controller
     {
         $credentials = request(['email', 'password']);
 
-        if (! $token = auth()->attempt($credentials)) {
+        if (! $token = auth('api')->attempt($credentials)) {
             return response()->json(['error' => 'Unauthorized'], 401);
         }
 
-        return $this->respondWithToken($token);
+        // Obtener el usuario autenticado con su taller mecánico
+        $user = auth('api')->user()->load('mechanicalWorkshop');
+
+        // Preparar los datos del usuario
+        $userData = [
+            'id' => $user->users_id,
+            'email' => $user->email,
+        ];
+
+        // Agregar datos del taller mecánico si existe, excluyendo created_at y updated_at
+        if ($user->mechanicalWorkshop) {
+            $mechanicalData = $user->mechanicalWorkshop->toArray();
+            unset($mechanicalData['created_at']);
+            unset($mechanicalData['updated_at']);
+            $userData['mechanical_workshop'] = $mechanicalData;
+        } else {
+            $userData['mechanical_workshop'] = null;
+        }
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => $userData
+        ]);
     }
 
 
@@ -72,7 +89,7 @@ class AuthController extends Controller
      */
     public function me()
     {
-        return response()->json(auth()->user());
+        return response()->json(auth('api')->user());
     }
 
     /**
@@ -82,9 +99,8 @@ class AuthController extends Controller
      */
     public function logout()
     {
-
         // Pass true to force the token to be blacklisted "forever"
-        auth()->logout(true);
+        auth('api')->logout(true);
         return response()->json(['message' => 'Successfully logged out']);
     }
 
@@ -95,7 +111,8 @@ class AuthController extends Controller
      */
     public function refresh()
     {
-        return $this->respondWithToken(auth()->refresh());
+        $token = JWTAuth::refresh();
+        return $this->respondWithToken($token);
     }
 
     /**
@@ -110,7 +127,7 @@ class AuthController extends Controller
         return response()->json([
             'access_token' => $token,
             'token_type' => 'bearer',
-            'expires_in' => auth()->factory()->getTTL() * 34,560
+            'expires_in' => JWTAuth::factory()->getTTL() * 60
         ]);
     }
 }
