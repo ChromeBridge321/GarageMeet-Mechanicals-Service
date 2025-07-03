@@ -30,7 +30,6 @@ class VehiclesService
             'plates' => $vehicle->plates,
             'model' => $vehicle->model,
             'make' => $vehicle->make,
-
         ];
         return $vehicle;
     }

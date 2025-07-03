@@ -17,4 +17,8 @@ class clients extends Model
     {
         return $this->belongsTo(Peoples::class, 'peoples_id');
     }
+    public function vehicles()
+    {
+        return $this->hasMany(Vehicles::class, 'clients_id');
+    }
 }

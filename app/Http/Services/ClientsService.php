@@ -62,7 +62,7 @@ class ClientsService
 
     public function getAll($workshopId)
     {
-        $clients = clients::with(['person'])
+        $clients = clients::with(['person', 'vehicles'])
             ->where('mechanical_workshops_id', $workshopId)
             ->get();
         return $clients;

@@ -26,10 +26,18 @@ class EmployeesController extends Controller
         $person = $this->peoplesService->create($request->validated());
         $employee = $this->employeesService->parseCreateData($request, $person);
         $employee = $this->employeesService->create($employee);
+
+        $employeesPositions = [
+            'employees_id' => $employee['employees_id'],
+            'positions_id' => $request['positions_id']
+        ];
+
+        $employeesPositions = $this->employeesService->createEmployeesPositions($employeesPositions);
         return response()->json([
             'message' => 'Employee created successfully',
             'Person' => $person,
-            'Employee' => $employee
+            'Employee' => $employee,
+            'EmployeesPositions' => $employeesPositions
         ], Response::HTTP_CREATED);
     }
 
@@ -37,11 +45,18 @@ class EmployeesController extends Controller
     {
         $person = $this->peoplesService->update($request->validated());
         $employee = $this->employeesService->parseUpdateData($request);
-        $employee = $this->employeesService->update($employee);
+        // $employee = $this->employeesService->update($employee);
+        $employeesPositions = [
+            'employees_id' => $employee['employees_id'],
+            'positions_id' => $request['positions_id'],
+            'new_positions_id' => $request['new_positions_id']
+        ];
+        $employeesPositions = $this->employeesService->updateEmployeesPositions($employeesPositions);
         return response()->json([
             'message' => 'Employee updated successfully',
             'Person' => $person,
-            'Employee' => $employee
+            'Employee' => $employee,
+            'EmployeesPositions' => $employeesPositions
         ], Response::HTTP_OK);
     }
 

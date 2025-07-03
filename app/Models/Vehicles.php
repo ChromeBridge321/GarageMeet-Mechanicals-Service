@@ -14,4 +14,8 @@ class Vehicles extends Model
         'model',
         'clients_id',
     ];
+    public function client()
+    {
+        return $this->belongsTo(clients::class, 'clients_id');
+    }
 }

@@ -66,7 +66,7 @@ class ClientsController extends Controller
 
     public function getAll(Request $request)
     {
-        $employees = $this->clientsService->getAll($request['mechanical_workshops_id']);
-        return response()->json($employees, Response::HTTP_OK);
+        $client = $this->clientsService->getAll($request['mechanical_workshops_id']);
+        return response()->json($client, Response::HTTP_OK);
     }
 }
