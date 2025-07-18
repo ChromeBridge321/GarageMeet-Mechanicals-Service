@@ -2,73 +2,60 @@
 
 namespace App\Http\Controllers;
 
+use App\Contracts\Services\EmployeeServiceInterface;
 use App\Http\Requests\StorePeoplesRequest;
 use App\Http\Requests\UpdatePeoplesRequest;
-use App\Http\Services\EmployeesService;
-use App\Http\Services\PeoplesService;
-use Illuminate\Http\Response;
+use App\Http\Responses\ApiResponse;
 use Illuminate\Http\Request;
 
 class EmployeesController extends Controller
 {
-    protected $employeesService;
-    protected $peoplesService;
+    private EmployeeServiceInterface $employeeService;
 
-    public function __construct(EmployeesService $employeesService, PeoplesService $peoplesService)
+    public function __construct(EmployeeServiceInterface $employeeService)
     {
-        $this->employeesService = $employeesService;
-        $this->peoplesService = $peoplesService;
+        $this->employeeService = $employeeService;
     }
 
     public function create(StorePeoplesRequest $request)
     {
-
-        $person = $this->peoplesService->create($request->validated());
-        $employee = $this->employeesService->parseCreateData($request, $person);
-        $employee = $this->employeesService->create($employee);
-
-        $employeesPositions = [
-            'employees_id' => $employee['employees_id'],
-            'positions_id' => $request['positions_id']
-        ];
-
-        $employeesPositions = $this->employeesService->createEmployeesPositions($employeesPositions);
-        return response()->json([
-            'message' => 'Employee created successfully',
-            'Person' => $person,
-            'Employee' => $employee,
-            'EmployeesPositions' => $employeesPositions
-        ], Response::HTTP_CREATED);
+        try {
+            $result = $this->employeeService->createEmployee($request);
+            return ApiResponse::created('Employee created successfully', $result);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error creating employee', $e->getMessage());
+        }
     }
 
     public function update(UpdatePeoplesRequest $request)
     {
-        $person = $this->peoplesService->update($request->validated());
-        $employee = $this->employeesService->parseUpdateData($request);
-        // $employee = $this->employeesService->update($employee);
-        $employeesPositions = [
-            'employees_id' => $employee['employees_id'],
-            'positions_id' => $request['positions_id'],
-            'new_positions_id' => $request['new_positions_id']
-        ];
-        $employeesPositions = $this->employeesService->updateEmployeesPositions($employeesPositions);
-        return response()->json([
-            'message' => 'Employee updated successfully',
-            'Person' => $person,
-            'Employee' => $employee,
-            'EmployeesPositions' => $employeesPositions
-        ], Response::HTTP_OK);
+        try {
+            $result = $this->employeeService->updateEmployee($request);
+            return ApiResponse::success('Employee updated successfully', $result);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error updating employee', $e->getMessage());
+        }
     }
 
     public function delete(Request $request)
     {
-        $this->employeesService->delete($request['peoples_id'], $request['employees_id']);
-        return response()->json(['message' => 'Employee deleted successfully'], Response::HTTP_OK);
+        try {
+            $this->employeeService->deleteEmployee(
+                $request['peoples_id']
+            );
+            return ApiResponse::success('Employee deleted successfully');
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error deleting employee', $e->getMessage());
+        }
     }
 
     public function getAll(Request $request)
     {
-        $employees = $this->employeesService->getAll($request['mechanical_workshops_id']);
-        return response()->json($employees, Response::HTTP_OK);
+        try {
+            $employees = $this->employeeService->getAllEmployees($request['mechanical_workshops_id']);
+            return response()->json($employees);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error retrieving employees', $e->getMessage());
+        }
     }
 }

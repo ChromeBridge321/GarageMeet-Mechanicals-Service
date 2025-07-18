@@ -49,16 +49,43 @@ public function getModelsByMakeId($makeId)
             return response()->json(['message' => 'Make not found'], 404);
         }
 
-        // Obtener todos los modelos que pertenecen a esta marca usando la relación
-        $models = $make->models;
+        // Obtener todos los modelos que pertenecen a esta marca con el makes_model_id
+        $models = $make->models()->withPivot('makes_model_id')->get();
 
         if ($models->isNotEmpty()) {
+            // Formatear la respuesta para incluir el makes_model_id
+            $formattedModels = $models->map(function ($model) {
+                return [
+                    'model_id' => $model->model_id,
+                    'name' => $model->name,
+                    'makes_model_id' => $model->pivot->makes_model_id
+                ];
+            });
+
             return response()->json([
                 'make' => $make,
-                'models' => $models
+                'models' => $formattedModels
             ], 200);
         } else {
             return response()->json(['message' => 'No models found for this make'], 404);
         }
+    }
+
+    public function getModelMakeByMakesModelId($makesModelId)
+    {
+        // Verificar si el makes_model_id existe
+        $makeModel = MakeModel::find($makesModelId);
+        if (!$makeModel) {
+            return response()->json(['message' => 'MakeModel not found'], 404);
+        }
+
+        // Obtener la marca y el modelo asociados
+        $make = $makeModel->make->name;
+        $model = $makeModel->model->name;
+
+        return response()->json([
+            'make' => $make,
+            'model' => $model
+        ], 200);
     }
 }

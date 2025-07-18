@@ -65,5 +65,6 @@ Route::prefix('vehiclesService')->group(function () {
         Route::get('getModelByName/{name}', [VehiclesController::class, 'getModelByName']);
         Route::get('getMakeByName/{name}', [VehiclesController::class, 'getMakeByName']);
         Route::get('getModelsByMakeId/{makeId}', [VehiclesController::class, 'getModelsByMakeId']);
+        Route::get('getMMByMMID/{makesModelId}', [VehiclesController::class, 'getModelMakeByMakesModelId']);
     });
 });

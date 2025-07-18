@@ -13,8 +13,7 @@ class VehiclesService
             'vehicles_id' => $vehicle->vehicles_id,
             'clients_id' => $vehicle->clients_id,
             'plates' => $vehicle->plates,
-            'model' => $vehicle->model,
-            'make' => $vehicle->make,
+            'makes_model_id' => $vehicle->makes_model_id,
 
         ];
         return $vehicle;
@@ -39,8 +38,7 @@ class VehiclesService
         $vehicle = [
             'clients_id' => $clients_id,
             'plates' => $data['plates'],
-            'model' => $data['model'],
-            'make' => $data['make']
+            'makes_model_id' => $data['makes_model_id'],
         ];
 
         return $vehicle;
