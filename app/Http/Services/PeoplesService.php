@@ -1,10 +1,7 @@
 <?php
 
 namespace App\Http\Services;
-
-use App\Models\Employees;
 use App\Models\Peoples;
-use Illuminate\Http\Response;
 
 class PeoplesService
 {

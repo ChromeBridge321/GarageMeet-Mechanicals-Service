@@ -5,6 +5,7 @@ use App\Http\Controllers\MechanicalWorkshopController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\VehiclesController;
 use Illuminate\Support\Facades\Route;
 
 
@@ -53,5 +54,16 @@ Route::prefix('clients')->group(function () {
         Route::post('update', [ClientsController::class, 'update']);
         Route::delete('delete', [ClientsController::class, 'delete']);
         Route::get('all', [ClientsController::class, 'getAll']);
+    });
+});
+
+
+Route::prefix('vehiclesService')->group(function () {
+    Route::middleware('api.auth')->group(function () {
+        Route::get('getAllModels', [VehiclesController::class, 'getAllModels']);
+        Route::get('getAllMakes', [VehiclesController::class, 'getAllMakes']);
+        Route::get('getModelByName/{name}', [VehiclesController::class, 'getModelByName']);
+        Route::get('getMakeByName/{name}', [VehiclesController::class, 'getMakeByName']);
+        Route::get('getModelsByMakeId/{makeId}', [VehiclesController::class, 'getModelsByMakeId']);
     });
 });
