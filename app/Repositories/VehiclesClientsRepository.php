@@ -2,10 +2,10 @@
 
 namespace App\Repositories;
 
-use App\Contracts\Repositories\VehicleRepositoryInterface;
+use App\Contracts\Repositories\VehiclesClientsRepositoryInterface;
 use App\Models\Vehicles;
 
-class VehicleRepository implements VehicleRepositoryInterface
+class VehiclesClientsRepository implements VehiclesClientsRepositoryInterface
 {
     public function create(array $data): array
     {

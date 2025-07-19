@@ -4,7 +4,7 @@ namespace App\Services;
 
 use App\Contracts\Repositories\ClientRepositoryInterface;
 use App\Contracts\Repositories\PeopleRepositoryInterface;
-use App\Contracts\Repositories\VehicleRepositoryInterface;
+use App\Contracts\Repositories\VehiclesClientsRepositoryInterface;
 use App\Contracts\Services\ClientServiceInterface;
 use App\Http\Requests\StorePeoplesRequest;
 use App\Http\Requests\UpdatePeoplesRequest;
@@ -14,12 +14,12 @@ class ClientService implements ClientServiceInterface
 {
     private PeopleRepositoryInterface $peopleRepository;
     private ClientRepositoryInterface $clientRepository;
-    private VehicleRepositoryInterface $vehicleRepository;
+    private VehiclesClientsRepositoryInterface $vehicleRepository;
 
     public function __construct(
         PeopleRepositoryInterface $peopleRepository,
         ClientRepositoryInterface $clientRepository,
-        VehicleRepositoryInterface $vehicleRepository
+        VehiclesClientsRepositoryInterface $vehicleRepository
     ) {
         $this->peopleRepository = $peopleRepository;
         $this->clientRepository = $clientRepository;

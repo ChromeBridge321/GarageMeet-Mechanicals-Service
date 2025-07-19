@@ -2,7 +2,7 @@
 
 namespace App\Contracts\Repositories;
 
-interface VehicleRepositoryInterface
+interface VehiclesClientsRepositoryInterface
 {
     public function create(array $data): array;
     public function update(int $id, array $data): array;
