@@ -53,8 +53,15 @@ class PositionRepository implements PositionRepositoryInterface
 
     public function getAllByWorkshop(int $workshopId): array
     {
-        return Positions::where('mechanical_workshops_id', $workshopId)
+        $positions = Positions::where('mechanical_workshops_id', $workshopId)
             ->get()
             ->toArray();
+
+            $positions = [
+                'positions_id' => $positions[0]['positions_id'],
+                'name' => $positions[0]['name']
+            ];
+
+        return $positions;
     }
 }
