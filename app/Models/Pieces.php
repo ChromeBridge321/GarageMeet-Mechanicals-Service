@@ -13,4 +13,5 @@ class Pieces extends Model
         'mechanical_workshops_id',
         'price',
     ];
+    public $timestamps = false;
 }

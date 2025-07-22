@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id('payment_types_id');
             $table->string('name', 60);
             $table->unsignedBigInteger('mechanical_workshops_id');
-            $table->timestamps();
+
             $table->foreign('mechanical_workshops_id')->references('id')->on('mechanical_workshops')->onDelete('cascade');
         });
     }

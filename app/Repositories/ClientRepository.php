@@ -33,20 +33,35 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function findById(int $id): ?array
     {
-        $client = clients::find($id);
+        $client = clients::with(['person', 'vehicles'])->find($id);
 
         if (!$client) {
             return null;
         }
 
-        return [
-            'clients_id' => $client->clients_id,
-            'mechanical_workshops_id' => $client->mechanical_workshops_id,
-            'peoples_id' => $client->peoples_id,
-        ];
-    }
+        $clientArray = $client->makeHidden(['created_at', 'updated_at'])->toArray();
 
-    public function delete(int $id): bool
+        // Ocultar timestamps de person si existe
+        if (isset($clientArray['person'])) {
+            unset($clientArray['person']['created_at'], $clientArray['person']['updated_at']);
+        }
+
+        // Agregar nombres de marca y modelo a los vehículos
+        if (isset($clientArray['vehicles']) && !empty($clientArray['vehicles'])) {
+            foreach ($clientArray['vehicles'] as &$vehicle) {
+                // Ocultar timestamps de vehicles
+                unset($vehicle['created_at'], $vehicle['updated_at']);
+
+                if (isset($vehicle['makes_model_id'])) {
+                    $makeModelInfo = $this->getMakeModelName($vehicle['makes_model_id']);
+                    $vehicle['make'] = $makeModelInfo['make'];
+                    $vehicle['model'] = $makeModelInfo['model'];
+                }
+            }
+        }
+
+        return $clientArray;
+    }    public function delete(int $id): bool
     {
         $client = clients::findOrFail($id);
         return $client->delete();
@@ -54,12 +69,33 @@ class ClientRepository implements ClientRepositoryInterface
 
     public function getAllByWorkshop(int $workshopId): array
     {
-        $clients =  clients::with(['person', 'vehicles'])
+        $clients = clients::with(['person', 'vehicles'])
             ->where('mechanical_workshops_id', $workshopId)
             ->get()
+            ->makeHidden(['created_at', 'updated_at'])
             ->toArray();
-        $makeModelNames = $this->getMakeModelName($clients[0]['vehicles'][0]['makes_model_id']);
-        $clients = $this->ParseAllClientsData($clients, $makeModelNames['make'], $makeModelNames['model']);
+
+        // Agregar nombres de marca y modelo a cada cliente
+        foreach ($clients as &$client) {
+            // Ocultar timestamps de person si existe
+            if (isset($client['person'])) {
+                unset($client['person']['created_at'], $client['person']['updated_at']);
+            }
+
+            if (isset($client['vehicles']) && !empty($client['vehicles'])) {
+                foreach ($client['vehicles'] as &$vehicle) {
+                    // Ocultar timestamps de vehicles
+                    unset($vehicle['created_at'], $vehicle['updated_at']);
+
+                    if (isset($vehicle['makes_model_id'])) {
+                        $makeModelInfo = $this->getMakeModelName($vehicle['makes_model_id']);
+                        $vehicle['make'] = $makeModelInfo['make'];
+                        $vehicle['model'] = $makeModelInfo['model'];
+                    }
+                }
+            }
+        }
+
         return $clients;
     }
 
@@ -75,28 +111,4 @@ class ClientRepository implements ClientRepositoryInterface
         ];
     }
 
-
-    private function ParseAllClientsData($clients, $make, $model): array
-    {
-        return [
-            'clients_id' => $clients[0]['clients_id'],
-            'peoples_id' => $clients[0]['clients_id'],
-            'person' => [
-                'peoples_id' => $clients[0]['person']['peoples_id'],
-                'name' => $clients[0]['person']['name'],
-                'last_name' => $clients[0]['person']['last_name'],
-                'email' => $clients[0]['person']['email'],
-                'cellphone_number' => $clients[0]['person']['cellphone_number'],
-            ],
-            'vehicles' => [
-                [
-                    'vehicles_id' => $clients[0]['vehicles'][0]['vehicles_id'],
-                    'plates' => $clients[0]['vehicles'][0]['plates'],
-                    'makes_model_id' => $clients[0]['vehicles'][0]['makes_model_id'],
-                    'make' => $make,
-                    'model' => $model,
-                ]
-            ],
-        ];
-    }
 }

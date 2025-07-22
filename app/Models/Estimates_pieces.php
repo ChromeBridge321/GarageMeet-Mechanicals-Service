@@ -11,4 +11,5 @@ class Estimates_pieces extends Model
         'estimates_id',
         'pieces_id',
     ];
+    public $timestamps = false;
 }

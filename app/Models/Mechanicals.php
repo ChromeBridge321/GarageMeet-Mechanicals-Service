@@ -17,5 +17,5 @@ class Mechanicals extends Model
         'google_maps_link'
 
     ];
-
+    public $timestamps = false;
 }

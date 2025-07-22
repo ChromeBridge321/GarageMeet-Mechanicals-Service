@@ -59,25 +59,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             ->where('mechanical_workshops_id', $workshopId)
             ->get()
             ->toArray();
-        $employees = [
-            'employees_id' => $employees[0]['employees_id'],
-            'peoples_id' => $employees[0]['peoples_id'],
-            'person' => [
-                'peoples_id' => $employees[0]['person']['peoples_id'],
-                'name' => $employees[0]['person']['name'],
-                'last_name' => $employees[0]['person']['last_name'],
-                'email' => $employees[0]['person']['email'],
-                'cellphone_number' => $employees[0]['person']['cellphone_number'],
-                'positions' => [
-                    'positions_id' => $employees[0]['positions'][0]['positions_id'],
-                    'name' => $employees[0]['positions'][0]['name'],
-                ],
-                'pivot' => [
-                    'employees_id' => $employees[0]['positions'][0]['pivot']['employees_id'],
-                    'positions_id' => $employees[0]['positions'][0]['pivot']['positions_id'],
-                ]
-            ],
-        ];
         return $employees;
     }
 

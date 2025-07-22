@@ -14,4 +14,5 @@ class Estimates extends Model
         'mechanical_workshops_id',
         'date',
     ];
+    public $timestamps = false;
 }

@@ -51,17 +51,10 @@ class PositionRepository implements PositionRepositoryInterface
         return $position->delete();
     }
 
-    public function getAllByWorkshop(int $workshopId): array
+    public function getAllByWorkshop(int $workshopId) : array
     {
         $positions = Positions::where('mechanical_workshops_id', $workshopId)
-            ->get()
-            ->toArray();
-
-            $positions = [
-                'positions_id' => $positions[0]['positions_id'],
-                'name' => $positions[0]['name']
-            ];
-
+            ->get()->toArray();
         return $positions;
     }
 }

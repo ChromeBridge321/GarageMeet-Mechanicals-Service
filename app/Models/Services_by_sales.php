@@ -11,4 +11,5 @@ class Services_by_sales extends Model
         'services_id',
         'services_sales_id',
     ];
+    public $timestamps = false;
 }

@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', 60);
             $table->integer('states_id');
             //$table->foreign('states_id')->references('states_id')->on('states')->onDelete('cascade');
-            $table->timestamps();
+
         });
     }
 

@@ -12,7 +12,7 @@ class Employees extends Model
         'mechanical_workshops_id',
         'peoples_id',
     ];
-
+    public $timestamps = false;
     public function person()
     {
         return $this->belongsTo(Peoples::class, 'peoples_id');

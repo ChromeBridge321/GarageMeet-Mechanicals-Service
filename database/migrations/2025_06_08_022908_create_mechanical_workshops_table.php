@@ -21,7 +21,7 @@ return new class extends Migration
             $table->text('address');
             $table->text('google_maps_link');
             $table->foreign('users_id')->references('users_id')->on('users')->onDelete('cascade');
-            $table->timestamps();
+
         });
     }
 

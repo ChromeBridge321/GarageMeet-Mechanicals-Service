@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('makes', function (Blueprint $table) {
             $table->id('make_id');
             $table->string('name');
-            $table->timestamps();
+
         });
     }
 

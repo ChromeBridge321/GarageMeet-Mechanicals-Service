@@ -13,4 +13,5 @@ class Services extends Model
         'name',
 
     ];
+    public $timestamps = false;
 }

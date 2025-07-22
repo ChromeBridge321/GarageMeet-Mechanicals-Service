@@ -13,6 +13,7 @@ class Vehicles extends Model
         'plates',
         'clients_id',
     ];
+    public $timestamps = false;
     public function client()
     {
         return $this->belongsTo(clients::class, 'clients_id');

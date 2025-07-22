@@ -26,7 +26,7 @@ class UpdatePeoplesRequest extends FormRequest
             'name' => 'required|string|max:60',
             'last_name' => 'required|string|max:60',
             'email' => 'required|string|max:120|email',
-            'cellphone_number' => 'required|string|max:10'
+            'cellphone_number' => 'required|string|max:14|min:14',
         ];
     }
 }

@@ -11,7 +11,7 @@ class Employees_positions extends Model
         'employees_id',
         'positions_id',
     ];
-
+    public $timestamps = false;
     public function position()
     {
         return $this->belongsTo(Positions::class, 'positions_id');

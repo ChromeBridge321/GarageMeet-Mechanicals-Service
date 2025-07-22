@@ -19,7 +19,7 @@ return new class extends Migration
                 ->references('id')
                 ->on('mechanical_workshops')
                 ->onDelete('cascade');
-            $table->timestamps();
+
         });
     }
 

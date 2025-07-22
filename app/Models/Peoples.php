@@ -15,5 +15,5 @@ class Peoples extends Model
         'cellphone_number',
 
     ];
-
+    public $timestamps = false;
 }

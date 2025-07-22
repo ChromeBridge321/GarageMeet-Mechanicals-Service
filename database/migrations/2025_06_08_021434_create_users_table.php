@@ -21,7 +21,7 @@ return new class extends Migration
             $table->unsignedBigInteger('type_users_id');
             $table->foreign('type_users_id')->references('type_users_id')->on('type_users')->onDelete('cascade');
             $table->rememberToken();
-            $table->timestamps();
+
         });
 
         Schema::create('password_reset_tokens', function (Blueprint $table) {

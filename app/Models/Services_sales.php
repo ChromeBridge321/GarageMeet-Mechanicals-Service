@@ -17,4 +17,5 @@ class Services_sales extends Model
         'date',
         'price',
     ];
+    public $timestamps = false;
 }

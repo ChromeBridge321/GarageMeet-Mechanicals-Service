@@ -14,4 +14,5 @@ class Appointments extends Model
         'clients_id',
         'date'
     ];
+    public $timestamps = false;
 }

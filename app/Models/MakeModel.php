@@ -12,7 +12,7 @@ class MakeModel extends Model
         'make_id',
         'model_id',
     ];
-
+    public $timestamps = false;
     // Relación con la tabla Makes (muchos a uno)
     public function make()
     {
