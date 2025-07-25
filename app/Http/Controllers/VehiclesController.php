@@ -2,7 +2,8 @@
 namespace App\Http\Controllers;
 use App\Http\Responses\ApiResponse;
 use App\Contracts\Services\VehiclesServiceInterface;
-
+use Illuminate\Http\Client\Request as ClientRequest;
+use Illuminate\Http\Request;
 
 class VehiclesController extends Controller
 {
@@ -32,9 +33,9 @@ class VehiclesController extends Controller
     }
 
 
-    public function getModelByName(string $name){
+    public function getModelByName(Request $request){
         try {
-            $name = (string) $name; // Ensure the name is a string
+            $name = (string) $request->name; // Ensure the name is a string
             $vehicles = $this->vehiclesService->ModelByName($name);
             return response()->json($vehicles);
         } catch (\Exception $e) {
@@ -43,8 +44,9 @@ class VehiclesController extends Controller
     }
 
 
-    public function getMakeByName(string $name){
+    public function getMakeByName(Request $request){
         try {
+            $name = (string) $request->name; // Ensure the name is a string
             $vehicles = $this->vehiclesService->MakeByName($name);
             return response()->json($vehicles);
         } catch (\Exception $e) {

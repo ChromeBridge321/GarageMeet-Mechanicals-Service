@@ -64,8 +64,8 @@ Route::prefix('vehiclesService')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::get('getAllModels', [VehiclesController::class, 'getAllModels']);
         Route::get('getAllMakes', [VehiclesController::class, 'getAllMakes']);
-        Route::get('getModelByName/{name}', [VehiclesController::class, 'getModelByName']);
-        Route::get('getMakeByName/{name}', [VehiclesController::class, 'getMakeByName']);
+        Route::get('getModelByName', [VehiclesController::class, 'getModelByName']);
+        Route::get('getMakeByName', [VehiclesController::class, 'getMakeByName']);
         Route::get('getModelsByMakeId/{makeId}', [VehiclesController::class, 'getModelsByMakeId']);
         Route::get('getMMByMMID/{makesModelId}', [VehiclesController::class, 'getModelMakeByMakesModelId']);
     });
