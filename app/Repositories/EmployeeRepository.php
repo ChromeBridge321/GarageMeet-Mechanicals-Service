@@ -32,18 +32,21 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         ];
     }
 
-    public function findById(int $id): ?array
+    public function findById(int $employeeId): ?array
     {
-        $employee = Employees::find($id);
+        $employee = Employees::with(['person', 'positions'])
+            ->where('employees_id', $employeeId)
+            ->first();
 
         if (!$employee) {
             return null;
         }
-
         return [
             'employees_id' => $employee->employees_id,
             'mechanical_workshops_id' => $employee->mechanical_workshops_id,
             'peoples_id' => $employee->peoples_id,
+            'person' => $employee->person,
+            'positions' => $employee->positions
         ];
     }
 

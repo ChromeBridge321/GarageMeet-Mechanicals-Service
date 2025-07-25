@@ -3,6 +3,7 @@
 namespace App\Repositories;
 
 use App\Contracts\Repositories\VehiclesClientsRepositoryInterface;
+use App\Models\MakeModel;
 use App\Models\Vehicles;
 
 class VehiclesClientsRepository implements VehiclesClientsRepositoryInterface
@@ -57,5 +58,14 @@ class VehiclesClientsRepository implements VehiclesClientsRepositoryInterface
     public function getByClientId(int $clientId): array
     {
         return Vehicles::where('clients_id', $clientId)->get()->toArray();
+    }
+
+    public function getMakeModelId($makeId, $modelId) : ?int
+    {
+        $makeModelId = MakeModel::where('make_id', $makeId)
+            ->where('model_id', $modelId)
+            ->get();
+
+        return $makeModelId->isNotEmpty() ? $makeModelId->first()->makes_model_id : null;
     }
 }

@@ -58,4 +58,14 @@ class EmployeesController extends Controller
             return ApiResponse::error('Error retrieving employees', $e->getMessage());
         }
     }
+
+    public function getById(int $id)
+    {
+        try {
+            $employee = $this->employeeService->getEmployeeById($id);
+            return response()->json($employee);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error retrieving employee', $e->getMessage());
+        }
+    }
 }

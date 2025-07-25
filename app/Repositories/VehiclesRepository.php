@@ -64,4 +64,6 @@ class VehiclesRepository implements VehiclesRepositoryInterface
             ]
         ];
     }
+
+
 }

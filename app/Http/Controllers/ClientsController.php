@@ -6,6 +6,7 @@ use App\Contracts\Services\ClientServiceInterface;
 use App\Http\Requests\StorePeoplesRequest;
 use App\Http\Requests\UpdatePeoplesRequest;
 use App\Http\Responses\ApiResponse;
+use GuzzleHttp\Psr7\Response;
 use Illuminate\Http\Request;
 
 class ClientsController extends Controller
@@ -56,6 +57,19 @@ class ClientsController extends Controller
             return response()->json($clients);
         } catch (\Exception $e) {
             return ApiResponse::error('Error retrieving clients', $e->getMessage());
+        }
+    }
+
+    public function getById(Request $request)
+    {
+        try {
+            $client = $this->clientService->getClientById(
+                $request['client_id'],
+                $request['mechanical_workshops_id']
+            );
+            return response()->json($client);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error retrieving client', $e->getMessage());
         }
     }
 }

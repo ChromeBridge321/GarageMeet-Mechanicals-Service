@@ -34,6 +34,7 @@ class VehiclesController extends Controller
 
     public function getModelByName(string $name){
         try {
+            $name = (string) $name; // Ensure the name is a string
             $vehicles = $this->vehiclesService->ModelByName($name);
             return response()->json($vehicles);
         } catch (\Exception $e) {

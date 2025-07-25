@@ -9,4 +9,5 @@ interface VehiclesClientsRepositoryInterface
     public function findById(int $id): ?array;
     public function delete(int $id): bool;
     public function getByClientId(int $clientId): array;
+    public function getMakeModelId(int $makeId, int $modelId): ?int;
 }

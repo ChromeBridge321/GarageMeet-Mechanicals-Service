@@ -31,26 +31,24 @@ class ClientRepository implements ClientRepositoryInterface
         ];
     }
 
-    public function findById(int $id): ?array
+    public function findById(int $client_id, int $mechanical_id): ?array
     {
-        $client = clients::with(['person', 'vehicles'])->find($id);
+        $client = clients::with(['person', 'vehicles'])
+            ->where('clients_id', $client_id)
+            ->where('mechanical_workshops_id', $mechanical_id)
+            ->first()->toArray();
+
 
         if (!$client) {
-            return null;
+            return [
+                'error' => 'Client not found',
+            ];
         }
 
-        $clientArray = $client->makeHidden(['created_at', 'updated_at'])->toArray();
-
-        // Ocultar timestamps de person si existe
-        if (isset($clientArray['person'])) {
-            unset($clientArray['person']['created_at'], $clientArray['person']['updated_at']);
-        }
-
+        $clientArray = $client;
         // Agregar nombres de marca y modelo a los vehículos
         if (isset($clientArray['vehicles']) && !empty($clientArray['vehicles'])) {
             foreach ($clientArray['vehicles'] as &$vehicle) {
-                // Ocultar timestamps de vehicles
-                unset($vehicle['created_at'], $vehicle['updated_at']);
 
                 if (isset($vehicle['makes_model_id'])) {
                     $makeModelInfo = $this->getMakeModelName($vehicle['makes_model_id']);
@@ -61,7 +59,9 @@ class ClientRepository implements ClientRepositoryInterface
         }
 
         return $clientArray;
-    }    public function delete(int $id): bool
+
+    }
+    public function delete(int $id): bool
     {
         $client = clients::findOrFail($id);
         return $client->delete();
@@ -72,21 +72,12 @@ class ClientRepository implements ClientRepositoryInterface
         $clients = clients::with(['person', 'vehicles'])
             ->where('mechanical_workshops_id', $workshopId)
             ->get()
-            ->makeHidden(['created_at', 'updated_at'])
             ->toArray();
 
         // Agregar nombres de marca y modelo a cada cliente
         foreach ($clients as &$client) {
-            // Ocultar timestamps de person si existe
-            if (isset($client['person'])) {
-                unset($client['person']['created_at'], $client['person']['updated_at']);
-            }
-
             if (isset($client['vehicles']) && !empty($client['vehicles'])) {
                 foreach ($client['vehicles'] as &$vehicle) {
-                    // Ocultar timestamps de vehicles
-                    unset($vehicle['created_at'], $vehicle['updated_at']);
-
                     if (isset($vehicle['makes_model_id'])) {
                         $makeModelInfo = $this->getMakeModelName($vehicle['makes_model_id']);
                         $vehicle['make'] = $makeModelInfo['make'];

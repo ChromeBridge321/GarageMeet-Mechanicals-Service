@@ -11,4 +11,5 @@ interface ClientServiceInterface
     public function updateClient(UpdatePeoplesRequest $request): array;
     public function deleteClient(int $peopleId): bool;
     public function getAllClients(int $workshopId): array;
+    public function getClientById(int $client_id, int $mechanical_id): ?array;
 }

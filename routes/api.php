@@ -44,6 +44,7 @@ Route::prefix('employees')->group(function () {
         Route::post('update', [EmployeesController::class, 'update']);
         Route::delete('delete', [EmployeesController::class, 'delete']);
         Route::get('all', [EmployeesController::class, 'getAll']);
+        Route::get('getById/{id}', [EmployeesController::class, 'getById']);
 
     });
 });
@@ -54,6 +55,7 @@ Route::prefix('clients')->group(function () {
         Route::post('update', [ClientsController::class, 'update']);
         Route::delete('delete', [ClientsController::class, 'delete']);
         Route::get('all', [ClientsController::class, 'getAll']);
+        Route::get('getById', [ClientsController::class, 'getById']);
     });
 });
 

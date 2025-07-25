@@ -28,11 +28,16 @@ class ClientService implements ClientServiceInterface
 
     public function createClient(StorePeoplesRequest $request): array
     {
+
         return DB::transaction(function () use ($request) {
             $validatedData = $request->validated();
 
             // Create person
             $person = $this->peopleRepository->create($validatedData);
+            $makeModelId = $this->vehicleRepository->getMakeModelId(
+                $request['vehicle'][0]['make_id'],
+                $request['vehicle'][0]['model_id']
+            );
 
             // Create client
             $clientData = [
@@ -46,7 +51,7 @@ class ClientService implements ClientServiceInterface
             $vehicleCreateData = [
                 'clients_id' => $client['clients_id'],
                 'plates' => $vehicleData['plates'],
-                'makes_model_id' => $vehicleData['makes_model_id'],
+                'makes_model_id' => $makeModelId,
             ];
             $vehicle = $this->vehicleRepository->create($vehicleCreateData);
 
@@ -66,11 +71,16 @@ class ClientService implements ClientServiceInterface
             // Update person
             $person = $this->peopleRepository->update($validatedData['peoples_id'], $validatedData);
 
+
             // Update vehicle
             $vehicleData = $request['vehicle'][0];
+            $makeModelId = $this->vehicleRepository->getMakeModelId(
+                $vehicleData['make_id'],
+                $vehicleData['model_id']
+            );
             $vehicle = $this->vehicleRepository->update($vehicleData['vehicles_id'], [
                 'plates' => $vehicleData['plates'],
-                'makes_model_id' => $vehicleData['makes_model_id'],
+                'makes_model_id' => $makeModelId,
             ]);
 
             return [
@@ -92,5 +102,10 @@ class ClientService implements ClientServiceInterface
     public function getAllClients(int $workshopId): array
     {
         return $this->clientRepository->getAllByWorkshop($workshopId);
+    }
+
+    public function getClientById(int $client_id, int $mechanical_id): ?array
+    {
+        return $this->clientRepository->findById($client_id, $mechanical_id);
     }
 }
