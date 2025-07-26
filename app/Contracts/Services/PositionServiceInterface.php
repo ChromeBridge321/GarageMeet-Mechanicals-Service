@@ -10,5 +10,5 @@ interface PositionServiceInterface
     public function updatePosition(int $id, array $data): array;
     public function deletePosition(int $id): bool;
     public function getAllPositions(int $workshopId): array;
-    public function findPosition(int $id): ?array;
+    public function findPosition(int $id, int $mechanical_id): ?array;
 }

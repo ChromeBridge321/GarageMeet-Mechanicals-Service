@@ -30,12 +30,14 @@ class PositionRepository implements PositionRepositoryInterface
         ];
     }
 
-    public function findById(int $id): ?array
+    public function findById(int $id, int $mechanical_id): ?array
     {
-        $position = Positions::find($id);
+        $position = Positions::where('positions_id', $id)
+            ->where('mechanical_workshops_id', $mechanical_id)
+            ->first();
 
         if (!$position) {
-            return null;
+            return [];
         }
 
         return [

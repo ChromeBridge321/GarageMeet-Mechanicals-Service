@@ -59,13 +59,14 @@ class EmployeesController extends Controller
         }
     }
 
-    public function getById(int $id)
+    public function getById(Request $request)
     {
         try {
-            $employee = $this->employeeService->getEmployeeById($id);
+            $employee = $this->employeeService->getEmployeeById($request['employee_id'], $request['mechanical_workshops_id']);
             return response()->json($employee);
         } catch (\Exception $e) {
             return ApiResponse::error('Error retrieving employee', $e->getMessage());
         }
     }
+
 }

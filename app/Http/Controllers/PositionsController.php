@@ -74,10 +74,10 @@ class PositionsController extends Controller
         }
     }
 
-    public function show(Request $request, $id)
+    public function getById(Request $request)
     {
         try {
-            $position = $this->positionService->findPosition($id);
+            $position = $this->positionService->findPosition($request->positions_id, $request->mechanical_workshops_id);
 
             if (!$position) {
                 return ApiResponse::notFound('Position not found');

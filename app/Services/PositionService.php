@@ -34,8 +34,8 @@ class PositionService implements PositionServiceInterface
         return $this->positionRepository->getAllByWorkshop($workshopId);
     }
 
-    public function findPosition(int $id): ?array
+    public function findPosition(int $id, int $mechanical_id): ?array
     {
-        return $this->positionRepository->findById($id);
+        return $this->positionRepository->findById($id, $mechanical_id);
     }
 }

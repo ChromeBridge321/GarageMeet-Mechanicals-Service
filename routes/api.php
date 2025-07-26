@@ -24,7 +24,7 @@ Route::prefix('auth')->group(function () {
 Route::prefix('mechanicals')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::post('create', [MechanicalWorkshopController::class, 'create']);
-        Route::post('update', [MechanicalWorkshopController::class, 'update']);
+        Route::put('update', [MechanicalWorkshopController::class, 'update']);
     });
 });
 
@@ -32,19 +32,20 @@ Route::prefix('mechanicals')->group(function () {
 Route::prefix('positions')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::post('create', [PositionsController::class, 'create']);
-        Route::post('update', [PositionsController::class, 'update']);
+        Route::put('update', [PositionsController::class, 'update']);
         Route::delete('delete', [PositionsController::class, 'delete']);
         Route::get('all', [PositionsController::class, 'getAll']);
+        Route::get('getById', [PositionsController::class, 'getById']);
     });
 });
 
 Route::prefix('employees')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::post('create', [EmployeesController::class, 'create']);
-        Route::post('update', [EmployeesController::class, 'update']);
+        Route::put('update', [EmployeesController::class, 'update']);
         Route::delete('delete', [EmployeesController::class, 'delete']);
         Route::get('all', [EmployeesController::class, 'getAll']);
-        Route::get('getById/{id}', [EmployeesController::class, 'getById']);
+        Route::get('getById', [EmployeesController::class, 'getById']);
 
     });
 });
@@ -52,7 +53,7 @@ Route::prefix('employees')->group(function () {
 Route::prefix('clients')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::post('create', [ClientsController::class, 'create']);
-        Route::post('update', [ClientsController::class, 'update']);
+        Route::put('update', [ClientsController::class, 'update']);
         Route::delete('delete', [ClientsController::class, 'delete']);
         Route::get('all', [ClientsController::class, 'getAll']);
         Route::get('getById', [ClientsController::class, 'getById']);

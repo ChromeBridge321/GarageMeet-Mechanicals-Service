@@ -6,7 +6,7 @@ interface EmployeeRepositoryInterface
 {
     public function create(array $data): array;
     public function update(int $id, array $data): array;
-    public function findById(int $employeeId): ?array;
+    public function findById(int $employeeId, int $mechanical_id): ?array;
     //public function delete(int $id): bool;
     public function getAllByWorkshop(int $workshopId): array;
     public function attachPosition(int $employeeId, int $positionId): array;

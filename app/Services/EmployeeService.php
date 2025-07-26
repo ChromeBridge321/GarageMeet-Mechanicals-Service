@@ -87,8 +87,8 @@ class EmployeeService implements EmployeeServiceInterface
         return $this->employeeRepository->getAllByWorkshop($workshopId);
     }
 
-    public function getEmployeeById(int $id): ?array
+    public function getEmployeeById(int $employeeId, int $mechanical_id): ?array
     {
-        return $this->employeeRepository->findById($id);
+        return $this->employeeRepository->findById($employeeId, $mechanical_id);
     }
 }

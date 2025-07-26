@@ -32,14 +32,15 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         ];
     }
 
-    public function findById(int $employeeId): ?array
+    public function findById(int $employeeId, int $mechanical_id): ?array
     {
         $employee = Employees::with(['person', 'positions'])
             ->where('employees_id', $employeeId)
+            ->where('mechanical_workshops_id', $mechanical_id)
             ->first();
 
         if (!$employee) {
-            return null;
+            return [];
         }
         return [
             'employees_id' => $employee->employees_id,
@@ -76,7 +77,7 @@ class EmployeeRepository implements EmployeeRepositoryInterface
         return $employeePosition->toArray();
     }
 
-    public function updatePosition(int $employeeId, int $oldPositionId, int $newPositionId): bool
+    public function updatePosition(int $employeeId, int | null $oldPositionId, int $newPositionId): bool
     {
         if ($oldPositionId === null) {
             $this->attachPosition($employeeId, $newPositionId);
@@ -88,7 +89,6 @@ class EmployeeRepository implements EmployeeRepositoryInterface
             ->where('positions_id', $oldPositionId)
             ->update([
                 'positions_id' => $newPositionId,
-                'updated_at' => now()
             ]);
 
         return $updated > 0;

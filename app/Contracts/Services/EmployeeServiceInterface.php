@@ -11,5 +11,5 @@ interface EmployeeServiceInterface
     public function updateEmployee(UpdatePeoplesRequest $request): array;
     public function deleteEmployee(int $peopleId): bool;
     public function getAllEmployees(int $workshopId): array;
-    public function getEmployeeById(int $id): ?array;
+    public function getEmployeeById(int $employeeId, int $mechanical_id): ?array;
 }

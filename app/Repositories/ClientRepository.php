@@ -54,12 +54,13 @@ class ClientRepository implements ClientRepositoryInterface
                     $makeModelInfo = $this->getMakeModelName($vehicle['makes_model_id']);
                     $vehicle['make'] = $makeModelInfo['make'];
                     $vehicle['model'] = $makeModelInfo['model'];
+                    $vehicle['model_id'] = $makeModelInfo['model_id'];
+                    $vehicle['make_id'] = $makeModelInfo['make_id'];
                 }
             }
         }
 
         return $clientArray;
-
     }
     public function delete(int $id): bool
     {
@@ -99,7 +100,8 @@ class ClientRepository implements ClientRepositoryInterface
         return [
             'make' => $makeModel->make->name,
             'model' => $makeModel->model->name,
+            'make_id' => $makeModel->make->make_id,
+            'model_id' => $makeModel->model->model_id,
         ];
     }
-
 }
