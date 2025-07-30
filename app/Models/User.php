@@ -28,6 +28,7 @@ class User extends Authenticatable implements JWTSubject
         'type_users_id',
 
     ];
+    public $timestamps = false;
 
     /**
      * The attributes that should be hidden for serialization.
@@ -58,6 +59,11 @@ class User extends Authenticatable implements JWTSubject
     public function mechanicalWorkshop()
     {
         return $this->hasOne(Mechanicals::class, 'users_id', 'users_id');
+    }
+
+    public function typeUser()
+    {
+        return $this->belongsTo(type_user::class, 'type_users_id', 'type_users_id');
     }
 
     /**

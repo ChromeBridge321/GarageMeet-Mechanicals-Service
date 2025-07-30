@@ -36,6 +36,9 @@ class AuthController extends Controller
         $userData = [
             'id' => $user->users_id,
             'email' => $user->email,
+            'type_user' => $user->typeUser->name ?? null, // Asegurarse de que el tipo de usuario esté cargado
+            'name' => $user->name,
+            'last_name' => $user->last_name,
         ];
 
         // Agregar datos del taller mecánico si existe, excluyendo created_at y updated_at
