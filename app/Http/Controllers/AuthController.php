@@ -2,7 +2,6 @@
 
 namespace App\Http\Controllers;
 
-use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Http\Request;
@@ -82,7 +81,85 @@ class AuthController extends Controller
             'type_users_id' => $request->input('type_user'),
         ]);
 
+        // $stripeCustomer = $user->createAsStripeCustomer();
+
+
         return response()->json(['message' => 'guardado con exito', 'user' => $user], Response::HTTP_CREATED);
+    }
+
+    /**
+     * Update user data.
+     *
+     * @return \Illuminate\Http\JsonResponse
+     */
+    public function updateUser(Request $request)
+    {
+        $user = auth('api')->user();
+        // return $user;
+
+        if (!$user) {
+            return response()->json(['error' => 'Unauthorized'], 401);
+        }
+
+        $validar = Validator::make($request->all(), [
+            'name' => 'sometimes|string|max:60',
+            'last_name' => 'sometimes|string|max:90',
+            'email' => 'sometimes|string|max:255|unique:users,email,' . $user->users_id . ',users_id',
+            'password' => 'sometimes|string|min:4|confirmed',
+            'current_password' => 'required_with:password|string',
+        ]);
+
+        if ($validar->fails()) {
+            return response()->json(['error' => $validar->messages()], Response::HTTP_BAD_REQUEST);
+        }
+
+        // Verificar contraseña actual si se está actualizando la contraseña
+        if ($request->has('password')) {
+            if (!Hash::check($request->input('current_password'), $user->password)) {
+                return response()->json(['error' => 'Current password is incorrect'], Response::HTTP_BAD_REQUEST);
+            }
+        }
+
+        // Actualizar solo los campos que se envían en la solicitud
+        $updateData = [];
+
+        if ($request->has('name')) {
+            $updateData['name'] = $request->input('name');
+        }
+
+        if ($request->has('last_name')) {
+            $updateData['last_name'] = $request->input('last_name');
+        }
+
+        if ($request->has('email')) {
+            $updateData['email'] = $request->input('email');
+        }
+
+        if ($request->has('password')) {
+            $updateData['password'] = Hash::make($request->input('password'));
+        }
+
+        // Actualizar el usuario
+        $user->update($updateData);
+
+        // Preparar los datos del usuario actualizado
+        $userData = [
+            'users_id' => $user->users_id,
+            'email' => $user->email,
+            'type_user' => $user->typeUser->name ?? null,
+            'name' => $user->name,
+            'last_name' => $user->last_name,
+            //'stripe_id' => $user->stripe_id,
+        ];
+
+        // if ($user->hasStripeId()) {
+        //     $user->syncStripeCustomerDetails();
+        // }
+
+        return response()->json([
+            'message' => 'User updated successfully',
+            'user' => $userData
+        ], Response::HTTP_OK);
     }
 
     /**
