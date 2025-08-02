@@ -2,89 +2,73 @@
 
 namespace App\Models;
 
-// use Illuminate\Contracts\Auth\MustVerifyEmail;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
-use Tymon\JWTAuth\Contracts\JWTSubject;
-use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Illuminate\Notifications\Notifiable;
+use Laravel\Sanctum\HasApiTokens;
 use Laravel\Cashier\Billable;
 
-class User extends Authenticatable implements JWTSubject
+class User extends Authenticatable
 {
-    use Notifiable;
-    /** @use HasFactory<\Database\Factories\UserFactory> */
-    use HasFactory, Notifiable;
-    use Billable;
-    /**
-     * The attributes that are mass assignable.
-     *
-     * @var list<string>
-     */
+    use HasApiTokens, HasFactory, Notifiable, Billable;
     protected $primaryKey = 'users_id';
     protected $fillable = [
         'name',
         'email',
         'password',
-        'last_name',
-        'type_users_id',
-
     ];
-    public $timestamps = false;
 
-    /**
-     * The attributes that should be hidden for serialization.
-     *
-     * @var list<string>
-     */
     protected $hidden = [
         'password',
         'remember_token',
     ];
 
-    /**
-     * Get the attributes that should be cast.
-     *
-     * @return array<string, string>
-     */
-    protected function casts(): array
+    protected $casts = [
+        'email_verified_at' => 'datetime',
+        'password' => 'hashed',
+    ];
+
+    // Verificar si el usuario tiene una suscripción activa
+    public function hasActiveSubscription(): bool
     {
-        return [
-            'email_verified_at' => 'datetime',
-            'password' => 'hashed',
-        ];
+        return $this->subscribed('default');
     }
 
-    /**
-     * Relación con el taller mecánico
-     */
-    public function mechanicalWorkshop()
+    // Obtener la suscripción activa
+    public function getActiveSubscription()
     {
-        return $this->hasOne(Mechanicals::class, 'users_id', 'users_id');
+        return $this->subscription('default');
     }
 
-    public function typeUser()
+    // Verificar si puede acceder al panel de control
+    public function canAccessDashboard(): bool
     {
-        return $this->belongsTo(type_user::class, 'type_users_id', 'type_users_id');
+        if (!$this->hasActiveSubscription()) {
+            return false;
+        }
+
+        $subscription = $this->getActiveSubscription();
+
+        // Verificar que la suscripción existe y está activa
+        if (!$subscription) {
+            return false;
+        }
+
+        // Verificar el estado de la suscripción
+        $activeStates = ['active', 'trialing'];
+
+        return in_array($subscription->stripe_status, $activeStates) &&
+            !$subscription->ended();
     }
 
-    /**
-     * Get the identifier that will be stored in the subject claim of the JWT.
-     *
-     * @return mixed
-     */
-    public function getJWTIdentifier()
+    // Verificar si la suscripción está cancelada pero aún activa
+    public function hasSubscriptionCancelled(): bool
     {
-        return $this->getKey();
-    }
+        if (!$this->hasActiveSubscription()) {
+            return false;
+        }
 
-    /**
-     * Return a key value array, containing any custom claims to be added to the JWT.
-     *
-     * @return array
-     */
-    public function getJWTCustomClaims()
-    {
-        return [];
+        $subscription = $this->getActiveSubscription();
+        return $subscription && $subscription->ends_at !== null && !$subscription->ended();
     }
-
 }

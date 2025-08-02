@@ -16,7 +16,7 @@ return new class extends Migration
             $table->string('name', 60);
             $table->string('last_name', 60);
             $table->string('email', 120);
-            $table->string('cellphone_number', 10);
+            $table->string('cellphone_number', 14);
 
         });
     }
