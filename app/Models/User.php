@@ -7,13 +7,14 @@ use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Tymon\JWTAuth\Contracts\JWTSubject;
 use Illuminate\Notifications\Notifiable;
 use Illuminate\Foundation\Auth\User as Authenticatable;
+use Laravel\Cashier\Billable;
 
 class User extends Authenticatable implements JWTSubject
 {
     use Notifiable;
     /** @use HasFactory<\Database\Factories\UserFactory> */
     use HasFactory, Notifiable;
-
+    use Billable;
     /**
      * The attributes that are mass assignable.
      *
@@ -85,4 +86,5 @@ class User extends Authenticatable implements JWTSubject
     {
         return [];
     }
+
 }

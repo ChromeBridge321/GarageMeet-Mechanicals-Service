@@ -5,6 +5,7 @@ use App\Http\Controllers\MechanicalWorkshopController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ClientsController;
+use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\VehiclesController;
 use Illuminate\Support\Facades\Route;
 
@@ -17,6 +18,7 @@ Route::prefix('auth')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::post('me', [AuthController::class, 'me']);
         Route::post('refresh', [AuthController::class, 'refresh']);
+        Route::put('update', [AuthController::class, 'updateUser']);
         Route::post('logout', [AuthController::class, 'logout']);
     });
 });
@@ -46,7 +48,6 @@ Route::prefix('employees')->group(function () {
         Route::delete('delete', [EmployeesController::class, 'delete']);
         Route::get('all', [EmployeesController::class, 'getAll']);
         Route::get('getById', [EmployeesController::class, 'getById']);
-
     });
 });
 
@@ -69,5 +70,14 @@ Route::prefix('vehiclesService')->group(function () {
         Route::get('getMakeByName', [VehiclesController::class, 'getMakeByName']);
         Route::get('getModelsByMakeId/{makeId}', [VehiclesController::class, 'getModelsByMakeId']);
         Route::get('getMMByMMID/{makesModelId}', [VehiclesController::class, 'getModelMakeByMakesModelId']);
+    });
+});
+
+Route::prefix('payment-methods')->group(function () {
+    Route::middleware('api.auth')->group(function () {
+        Route::post('setup-intent', [PaymentMethodController::class, 'createSetupIntent']);
+        Route::post('attach', [PaymentMethodController::class, 'attachPaymentMethod']);
+        Route::get('list', [PaymentMethodController::class, 'getPaymentMethods']);
+        Route::delete('delete', [PaymentMethodController::class, 'deletePaymentMethod']);
     });
 });

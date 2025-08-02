@@ -81,7 +81,7 @@ class AuthController extends Controller
             'type_users_id' => $request->input('type_user'),
         ]);
 
-        // $stripeCustomer = $user->createAsStripeCustomer();
+        $stripeCustomer = $user->createAsStripeCustomer();
 
 
         return response()->json(['message' => 'guardado con exito', 'user' => $user], Response::HTTP_CREATED);
@@ -152,9 +152,9 @@ class AuthController extends Controller
             //'stripe_id' => $user->stripe_id,
         ];
 
-        // if ($user->hasStripeId()) {
-        //     $user->syncStripeCustomerDetails();
-        // }
+        if ($user->hasStripeId()) {
+            $user->syncStripeCustomerDetails();
+        }
 
         return response()->json([
             'message' => 'User updated successfully',
