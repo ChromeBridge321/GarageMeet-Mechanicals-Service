@@ -12,4 +12,7 @@ interface MechanicalWorkshopServiceInterface
     public function deleteWorkshop(int $id): bool;
     public function findWorkshop(int $id): ?array;
     public function getAllWorkshopsByUser(int $userId): array;
+    public function getAllWorkshops(): array;
+    public function getAllWorkshopsByState(string $state): array;
+    public function getAllWorkshopsByStateAndCity(string $state, string $city): array;
 }

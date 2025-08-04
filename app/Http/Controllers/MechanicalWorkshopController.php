@@ -71,4 +71,34 @@ class MechanicalWorkshopController extends Controller
             return ApiResponse::error('Error retrieving mechanical workshops', $e->getMessage());
         }
     }
+
+    public function getAll()
+    {
+        try {
+            $workshops = $this->mechanicalWorkshopService->getAllWorkshops();
+            return response()->json($workshops);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error retrieving all mechanical workshops', $e->getMessage());
+        }
+    }
+
+    public function getAllWorkshopsByState(string $state)
+    {
+        try {
+            $workshops = $this->mechanicalWorkshopService->getAllWorkshopsByState($state);
+            return response()->json($workshops);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error retrieving mechanical workshops by state', $e->getMessage());
+        }
+    }
+
+    public function getAllWorkshopsByStateAndCity(string $state, string $city)
+    {
+        try {
+            $workshops = $this->mechanicalWorkshopService->getAllWorkshopsByStateAndCity($state, $city);
+            return response()->json($workshops);
+        } catch (\Exception $e) {
+            return ApiResponse::error('Error retrieving mechanical workshops by state and city', $e->getMessage());
+        }
+    }
 }

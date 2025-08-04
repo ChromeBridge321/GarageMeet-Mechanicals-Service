@@ -22,10 +22,11 @@ class StoreMechanicalsRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'users_id' => 'required|int',
+            'users_id' => 'sometimes|int',
             'cities_id' => 'required|int',
+            'states_id' => 'required|int',
             'name' => 'required|string|max:60',
-            'cellphone_number' => 'required|string|max:10',
+            'cellphone_number' => 'required|string|min:14|max:14',
             'email' => 'required|email|max:120',
             'address' => 'required|string|max:255',
             'google_maps_link' => 'required|string|max:255',

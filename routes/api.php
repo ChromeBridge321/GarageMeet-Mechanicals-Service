@@ -28,6 +28,10 @@ Route::prefix('mechanicals')->group(function () {
     Route::middleware('api.auth')->group(function () {
         Route::post('create', [MechanicalWorkshopController::class, 'create']);
         Route::put('update', [MechanicalWorkshopController::class, 'update']);
+        Route::get('all', [MechanicalWorkshopController::class, 'getAll']);
+        Route::get('getByState/{state}', [MechanicalWorkshopController::class, 'getAllWorkshopsByState']);
+        Route::get('getByStateAndCity/{state}/{city}', [MechanicalWorkshopController::class, 'getAllWorkshopsByStateAndCity']);
+
     });
 });
 

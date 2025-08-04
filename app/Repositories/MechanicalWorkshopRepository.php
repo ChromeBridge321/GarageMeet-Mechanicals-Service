@@ -15,6 +15,7 @@ class MechanicalWorkshopRepository implements MechanicalWorkshopRepositoryInterf
             'id' => $workshop->id,
             'users_id' => $workshop->users_id,
             'cities_id' => $workshop->cities_id,
+            'states_id' => $workshop->states_id,
             'name' => $workshop->name,
             'cellphone_number' => $workshop->cellphone_number,
             'email' => $workshop->email,
@@ -32,6 +33,7 @@ class MechanicalWorkshopRepository implements MechanicalWorkshopRepositoryInterf
             'id' => $workshop->id,
             'users_id' => $workshop->users_id,
             'cities_id' => $workshop->cities_id,
+            'states_id' => $workshop->states_id,
             'name' => $workshop->name,
             'cellphone_number' => $workshop->cellphone_number,
             'email' => $workshop->email,
@@ -52,6 +54,7 @@ class MechanicalWorkshopRepository implements MechanicalWorkshopRepositoryInterf
             'id' => $workshop->id,
             'users_id' => $workshop->users_id,
             'cities_id' => $workshop->cities_id,
+            'states_id' => $workshop->states_id,
             'name' => $workshop->name,
             'cellphone_number' => $workshop->cellphone_number,
             'email' => $workshop->email,
@@ -69,6 +72,25 @@ class MechanicalWorkshopRepository implements MechanicalWorkshopRepositoryInterf
     public function getAllByUser(int $userId): array
     {
         return Mechanicals::where('users_id', $userId)
+            ->get()
+            ->toArray();
+    }
+
+    public function getAll(): array
+    {
+        return Mechanicals::all()->toArray();
+    }
+
+    public function getAllByState(string $state): array
+    {
+        return Mechanicals::where('states_id', $state)
+            ->get()
+            ->toArray();
+    }
+    public function getAllByStateAndCity(string $state, string $city): array
+    {
+        return Mechanicals::where('states_id', $state)
+            ->where('cities_id', $city)
             ->get()
             ->toArray();
     }

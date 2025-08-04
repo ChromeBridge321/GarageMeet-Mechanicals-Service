@@ -44,4 +44,18 @@ class MechanicalWorkshopService implements MechanicalWorkshopServiceInterface
     {
         return $this->workshopRepository->getAllByUser($userId);
     }
+    public function getAllWorkshops(): array
+    {
+        return $this->workshopRepository->getAll();
+    }
+
+    public function getAllWorkshopsByState(string $state): array
+    {
+        return $this->workshopRepository->getAllByState($state);
+    }
+
+    public function getAllWorkshopsByStateAndCity(string $state, string $city): array
+    {
+        return $this->workshopRepository->getAllByStateAndCity($state, $city);
+    }
 }

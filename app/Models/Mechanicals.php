@@ -10,6 +10,7 @@ class Mechanicals extends Model
     protected $fillable = [
         'users_id',
         'cities_id',
+        'states_id',
         'name',
         'cellphone_number',
         'email',

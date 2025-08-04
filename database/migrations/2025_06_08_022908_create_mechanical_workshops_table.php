@@ -14,14 +14,16 @@ return new class extends Migration
         Schema::create('mechanical_workshops', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('users_id');
-            $table->integer('cities_id');
-            $table->string('name',60);
-            $table->string('cellphone_number',10);
-            $table->string('email',120);
+            $table->unsignedBigInteger('states_id');
+            $table->string('name', 60);
+            $table->string('cellphone_number', 14);
+            $table->string('email', 120);
             $table->text('address');
             $table->text('google_maps_link');
             $table->foreign('users_id')->references('users_id')->on('users')->onDelete('cascade');
-
+            $table->foreign('states_id')
+                ->references('states_id')
+                ->on('states');
         });
     }
 
