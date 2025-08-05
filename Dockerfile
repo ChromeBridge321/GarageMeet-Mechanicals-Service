@@ -1,57 +1,47 @@
-# Usar PHP 8.2 con Apache
+# Usa la imagen base de PHP con Apache
 FROM php:8.2-apache
 
-# Instalar dependencias del sistema
+# Instala dependencias del sistema y extensiones de PHP
 RUN apt-get update && apt-get install -y \
-    curl \
     libpng-dev \
+    libjpeg62-turbo-dev \
+    libfreetype6-dev \
     libonig-dev \
-    libxml2-dev \
     zip \
     unzip \
     git \
+    curl \
+    libxml2-dev \
     libzip-dev \
+    libssl-dev \
     libpq-dev \
-    nodejs \
-    npm \
-    && docker-php-ext-install pdo_mysql pdo_pgsql mbstring exif pcntl bcmath gd zip
+    postgresql-client \
+    && docker-php-ext-install pdo_mysql mbstring exif pcntl bcmath gd xml pdo_pgsql \
+    && a2enmod rewrite \
+    && apt-get clean && rm -rf /var/lib/apt/lists/*  # Limpieza de caché
 
-# Instalar Composer
+# Instala Composer
 COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 
-# Configurar Apache
-RUN a2enmod rewrite
-COPY default.conf /etc/apache2/sites-available/000-default.conf
-
-# Establecer directorio de trabajo
+# Establece el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copiar archivos de composer
-COPY composer.json composer.lock ./
-
-# Instalar dependencias de PHP
-RUN composer install --no-dev --optimize-autoloader --no-scripts
-
-# Copiar código fuente
+# Copia los archivos del proyecto
 COPY . .
 
-# Copiar package.json si existe y instalar dependencias de Node
-COPY package*.json ./
-RUN npm install
-
-# Configurar permisos
+# Ajusta los permisos de los archivos
 RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Generar clave de aplicación
-RUN php artisan key:generate --force
+# Instala las dependencias de Composer
+RUN composer install --no-dev --optimize-autoloader
 
-# Compilar assets con Vite
-RUN npm run build
-
-# Exponer puerto 80
+# Expone el puerto 80
 EXPOSE 80
 
-# Comando por defecto
+# Copia la configuración de Apache
+COPY default.conf /etc/apache2/sites-available/000-default.conf
+
+# Reinicia Apache para aplicar cambios
 CMD ["apache2-foreground"]
