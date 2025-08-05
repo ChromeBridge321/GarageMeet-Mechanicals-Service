@@ -15,15 +15,16 @@ return new class extends Migration
             $table->id();
             $table->unsignedBigInteger('users_id');
             $table->unsignedBigInteger('states_id');
+            $table->unsignedBigInteger('cities_id');
             $table->string('name', 60);
             $table->string('cellphone_number', 14);
             $table->string('email', 120);
             $table->text('address');
             $table->text('google_maps_link');
             $table->foreign('users_id')->references('users_id')->on('users')->onDelete('cascade');
-            $table->foreign('states_id')
-                ->references('states_id')
-                ->on('states');
+            $table->foreign(['cities_id', 'states_id'])
+                ->references(['cities_id', 'states_id'])
+                ->on('cities');
         });
     }
 

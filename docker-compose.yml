@@ -1,0 +1,63 @@
+version: '3.8'
+
+services:
+  app:
+    build: .
+    container_name: garage-meet-backend
+    ports:
+      - "8000:80"
+    volumes:
+      - .:/var/www/html
+      - ./storage:/var/www/html/storage
+    environment:
+      - APP_ENV=local
+      - APP_DEBUG=true
+      - DB_CONNECTION=mysql
+      - DB_HOST=db
+      - DB_PORT=3306
+      - DB_DATABASE=garage_meet
+      - DB_USERNAME=garage_user
+      - DB_PASSWORD=garage_password
+    depends_on:
+      - db
+    networks:
+      - garage-network
+
+  db:
+    image: mysql:8.0
+    container_name: garage-meet-db
+    restart: unless-stopped
+    ports:
+      - "3306:3306"
+    environment:
+      MYSQL_DATABASE: garage_meet
+      MYSQL_USER: garage_user
+      MYSQL_PASSWORD: garage_password
+      MYSQL_ROOT_PASSWORD: root_password
+    volumes:
+      - db_data:/var/lib/mysql
+    networks:
+      - garage-network
+
+  phpmyadmin:
+    image: phpmyadmin/phpmyadmin
+    container_name: garage-meet-phpmyadmin
+    restart: unless-stopped
+    ports:
+      - "8080:80"
+    environment:
+      PMA_HOST: db
+      PMA_PORT: 3306
+      PMA_USER: garage_user
+      PMA_PASSWORD: garage_password
+    depends_on:
+      - db
+    networks:
+      - garage-network
+
+volumes:
+  db_data:
+
+networks:
+  garage-network:
+    driver: bridge

@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\CitiesController;
 use App\Http\Controllers\MechanicalWorkshopController;
 use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\EmployeesController;
@@ -9,6 +10,10 @@ use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\VehiclesController;
 use Illuminate\Support\Facades\Route;
+
+Route::prefix('cities')->group(function () {
+    Route::get('findByName/{name}', [CitiesController::class, 'findByName']);
+});
 
 
 Route::prefix('auth')->group(function () {
@@ -25,13 +30,12 @@ Route::prefix('auth')->group(function () {
 });
 
 Route::prefix('mechanicals')->group(function () {
+    Route::post('create', [MechanicalWorkshopController::class, 'create']);
+    Route::get('all', [MechanicalWorkshopController::class, 'getAll']);
+    Route::get('getByState/{state}', [MechanicalWorkshopController::class, 'getAllWorkshopsByState']);
+    Route::get('getByStateAndCity/{state}/{city}', [MechanicalWorkshopController::class, 'getAllWorkshopsByStateAndCity']);
     Route::middleware('api.auth')->group(function () {
-        Route::post('create', [MechanicalWorkshopController::class, 'create']);
         Route::put('update', [MechanicalWorkshopController::class, 'update']);
-        Route::get('all', [MechanicalWorkshopController::class, 'getAll']);
-        Route::get('getByState/{state}', [MechanicalWorkshopController::class, 'getAllWorkshopsByState']);
-        Route::get('getByStateAndCity/{state}/{city}', [MechanicalWorkshopController::class, 'getAllWorkshopsByStateAndCity']);
-
     });
 });
 
