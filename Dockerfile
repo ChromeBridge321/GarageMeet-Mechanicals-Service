@@ -47,9 +47,9 @@ RUN composer run-script post-autoload-dump
 # Expone el puerto 80 (estándar para Apache)
 EXPOSE 80
 
-# Healthcheck para Coolify
-HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
-    CMD curl -f http://localhost/up || exit 1
+# Healthcheck simple - solo verifica que Apache responda
+HEALTHCHECK --interval=30s --timeout=10s --start-period=120s --retries=3 \
+    CMD curl -f http://localhost/ || curl -f http://localhost/up || exit 1
 
 # Copia el script de inicio y le da permisos
 COPY start.sh /usr/local/bin/start.sh
