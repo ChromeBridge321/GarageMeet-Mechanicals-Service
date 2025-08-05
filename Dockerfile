@@ -11,6 +11,8 @@ RUN apt-get update && apt-get install -y \
     unzip \
     git \
     curl \
+    nano \
+    cat \
     libxml2-dev \
     libzip-dev \
     libssl-dev \
@@ -26,7 +28,13 @@ COPY --from=composer:latest /usr/bin/composer /usr/bin/composer
 # Establece el directorio de trabajo
 WORKDIR /var/www/html
 
-# Copia los archivos del proyecto
+# Copia composer.json y composer.lock primero para mejor cache
+COPY composer.json composer.lock ./
+
+# Instala las dependencias de Composer
+RUN composer install --no-dev --optimize-autoloader --no-scripts
+
+# Copia el resto de los archivos del proyecto
 COPY . .
 
 # Ajusta los permisos de los archivos
@@ -34,14 +42,22 @@ RUN chown -R www-data:www-data /var/www/html \
     && chmod -R 755 /var/www/html/storage \
     && chmod -R 755 /var/www/html/bootstrap/cache
 
-# Instala las dependencias de Composer
-RUN composer install --no-dev --optimize-autoloader
+# Ejecuta los scripts de post-install de Composer
+RUN composer run-script post-autoload-dump
 
-# Expone el puerto 80
+# Expone el puerto 80 (estándar para Apache)
 EXPOSE 80
+
+# Healthcheck para Coolify
+HEALTHCHECK --interval=30s --timeout=10s --start-period=60s --retries=3 \
+    CMD curl -f http://localhost/up || exit 1
+
+# Copia el script de inicio y le da permisos
+COPY start.sh /usr/local/bin/start.sh
+RUN chmod +x /usr/local/bin/start.sh
 
 # Copia la configuración de Apache
 COPY default.conf /etc/apache2/sites-available/000-default.conf
 
-# Reinicia Apache para aplicar cambios
-CMD ["apache2-foreground"]
+# Usa el script de inicio
+CMD ["/usr/local/bin/start.sh"]
