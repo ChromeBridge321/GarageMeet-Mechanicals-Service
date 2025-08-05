@@ -12,7 +12,6 @@ RUN apt-get update && apt-get install -y \
     git \
     curl \
     nano \
-    cat \
     libxml2-dev \
     libzip-dev \
     libssl-dev \
