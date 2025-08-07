@@ -3,6 +3,7 @@
 namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
+use NunoMaduro\Collision\Adapters\Phpunit\State;
 
 class Mechanicals extends Model
 {
@@ -19,4 +20,10 @@ class Mechanicals extends Model
 
     ];
     public $timestamps = false;
+
+    public function city()
+    {
+        return $this->belongsTo(Cities::class, 'cities_id', 'cities_id');
+    }
+
 }

@@ -10,19 +10,20 @@ class CitiesRepository implements CitiesRepositoryInterface
 
     public function findByName($name): array
     {
-        $cities = Cities::with('state')
-            ->where('name', 'LIKE',  $name . '%')
-            ->take(20)
-            ->get()
-            ->map(function ($city) {
-                return [
-                    'cities_id' => $city->cities_id,
-                    'states_id' => $city->states_id,
-                    'name' => $city->name. ', ' . ($city->state ? $city->state->name : null),
-                ];
-            })
-            ->toArray();
+        $CitiesMap = [];
+        $cities = Cities::with('state:states_id,name')
+            ->select('cities_id', 'states_id', 'name')
+            ->where('name', 'LIKE', $name . '%')
+            ->take(10)
+            ->get();
 
-        return $cities;
+        foreach ($cities as $city) {
+            $CitiesMap[] = [
+                'cities_id' => $city->cities_id,
+                'states_id' => $city->states_id,
+                'name' => $city->name . ', ' . ($city->state ? $city->state->name : null),
+            ];
+        }
+        return $CitiesMap;
     }
 }
