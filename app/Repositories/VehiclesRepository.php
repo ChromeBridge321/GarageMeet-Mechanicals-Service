@@ -21,12 +21,12 @@ class VehiclesRepository implements VehiclesRepositoryInterface
 
     public function getModelByName(string $name): array
     {
-        return Models::where('name', 'like', '%' . $name . '%')->get()->take(10)->toArray();
+        return Models::where('name', 'like', $name . '%')->get()->take(10)->toArray();
     }
 
     public function getMakeByName(string $name): array
     {
-        return Makes::where('name', 'like', '%' . $name . '%')->get()->take(10)->toArray();
+        return Makes::where('name', 'like', $name . '%')->get()->take(10)->toArray();
     }
 
     public function getModelsByMakeId(int $makeId): array
