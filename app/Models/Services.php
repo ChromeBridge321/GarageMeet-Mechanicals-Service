@@ -9,9 +9,14 @@ class Services extends Model
     protected $table = 'services';
     protected $primaryKey = 'services_id';
     protected $fillable = [
-        'mechanicals_workshops_id',
+        'mechanical_workshops_id',
         'name',
 
     ];
     public $timestamps = false;
+
+    public function mechanicalWorkshop()
+    {
+        return $this->belongsTo(Mechanicals::class, 'mechanical_workshops_id', 'id');
+    }
 }

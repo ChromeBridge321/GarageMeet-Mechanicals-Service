@@ -26,4 +26,14 @@ class Mechanicals extends Model
         return $this->belongsTo(Cities::class, 'cities_id', 'cities_id');
     }
 
+    public function services()
+    {
+        return $this->hasMany(Services::class, 'mechanical_workshops_id', 'id');
+    }
+
+    public function paymentTypes()
+    {
+        return $this->hasMany(Payment_types::class, 'mechanical_workshops_id', 'id');
+    }
+
 }

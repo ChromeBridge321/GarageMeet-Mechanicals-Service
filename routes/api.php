@@ -7,6 +7,8 @@ use App\Http\Controllers\PositionsController;
 use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\PaymentMethodController;
+use App\Http\Controllers\PaymentTypesContoller;
+use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\VehiclesController;
 use Illuminate\Support\Facades\Route;
@@ -93,11 +95,33 @@ Route::middleware(['auth:api'])->group(function () {
         Route::post('resume', [SubscriptionController::class, 'resumeSubscription']);
     });
 
+    Route::prefix('services')->group(function () {
+        Route::get('all', [ServicesController::class, 'getAll']);
+    });
+
+    Route::prefix('payment-types')->group(function () {
+        Route::get('all', [PaymentTypesContoller::class, 'getAll']);
+    });
+
     // Rutas que requieren suscripción activa
     Route::middleware(['check.subscription'])->group(function () {
         // Aquí van todas las rutas del dashboard que requieren suscripción
         Route::prefix('dashboard')->group(function () {
-            // Métodos de pago
+            // Servicios del taller
+            Route::prefix('services')->group(function () {
+                Route::post('create', [ServicesController::class, 'create']);
+                Route::get('getById', [ServicesController::class, 'getById']);
+                Route::put('update', [ServicesController::class, 'update']);
+                Route::delete('delete', [ServicesController::class, 'delete']);
+            });
+
+            // Tipos de pago del taller
+            Route::prefix('payment-types')->group(function () {
+                Route::post('create', [PaymentTypesContoller::class, 'create']);
+                Route::get('getById', [PaymentTypesContoller::class, 'getById']);
+                Route::put('update', [PaymentTypesContoller::class, 'update']);
+                Route::delete('delete', [PaymentTypesContoller::class, 'delete']);
+            });
 
             Route::prefix('positions')->group(function () {
                 Route::middleware('api.auth')->group(function () {
