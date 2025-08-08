@@ -83,8 +83,30 @@ class AuthController extends Controller
 
         $stripeCustomer = $user->createAsStripeCustomer();
 
+        // Generar token JWT para el usuario recién registrado
+        $token = auth('api')->login($user);
 
-        return response()->json(['message' => 'guardado con exito', 'user' => $user], Response::HTTP_CREATED);
+        // Cargar relación del tipo de usuario
+        $user->load('typeUser');
+
+        // Preparar los datos del usuario
+        $userData = [
+            'id' => $user->users_id,
+            'email' => $user->email,
+            'type_user' => $user->typeUser->name ?? null,
+            'name' => $user->name,
+            'last_name' => $user->last_name,
+        ];
+
+        // El usuario recién registrado no tiene taller mecánico
+        $userData['mechanical_workshop'] = null;
+
+        return response()->json([
+            'access_token' => $token,
+            'token_type' => 'bearer',
+            'expires_in' => JWTAuth::factory()->getTTL() * 60,
+            'user' => $userData
+        ], Response::HTTP_CREATED);
     }
 
     /**
@@ -107,6 +129,8 @@ class AuthController extends Controller
             'email' => 'sometimes|string|max:255|unique:users,email,' . $user->users_id . ',users_id',
             'password' => 'sometimes|string|min:4|confirmed',
             'current_password' => 'required_with:password|string',
+            'type_users_id' => 'sometimes|int|exists:type_users,type_users_id',
+
         ]);
 
         if ($validar->fails()) {
@@ -137,6 +161,10 @@ class AuthController extends Controller
 
         if ($request->has('password')) {
             $updateData['password'] = Hash::make($request->input('password'));
+        }
+
+        if ($request->has('type_users_id')) {
+            $updateData['type_users_id'] = $request->input('type_users_id');
         }
 
         // Actualizar el usuario
