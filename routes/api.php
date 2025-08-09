@@ -181,7 +181,7 @@ Route::middleware(['auth:api'])->group(function () {
             // Gestión de citas desde el dashboard
             Route::prefix('appointments')->group(function () {
                 Route::middleware('api.auth')->group(function () {
-                    Route::get('all', [AppointmentController::class, 'getAll']);
+                    Route::get('all', [AppointmentController::class, 'getAllByWorkshop']);
                     Route::get('getById', [AppointmentController::class, 'getById']);
                     Route::post('confirm', [AppointmentController::class, 'confirm']);
                     Route::post('cancel', [AppointmentController::class, 'cancel']);

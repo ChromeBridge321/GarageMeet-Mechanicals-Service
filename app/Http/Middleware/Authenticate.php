@@ -26,7 +26,7 @@ class Authenticate
         }
         try {
             $token = str_replace('Bearer ', '', $token);
-            $decoded = JWT::decode($token, new JWTKey(env('JWT_SECRET'), 'HS256'));
+            $decoded = JWT::decode($token, new JWTKey(config('jwt.secret'), 'HS256'));
             return $next($request);
         } catch (ExpiredException $e) {
             return response()->json(['error' => 'Token has expired'], HttpResponse::HTTP_UNAUTHORIZED);

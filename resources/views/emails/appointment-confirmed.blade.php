@@ -31,12 +31,26 @@
 
             <div class="date-highlight">
                 <h3>📅 Fecha y Hora de tu Cita</h3>
+                @if($appointment->appointment_date)
+                @php
+                    $dayNames = ['Domingo', 'Lunes', 'Martes', 'Miércoles', 'Jueves', 'Viernes', 'Sábado'];
+                    $monthNames = ['', 'Enero', 'Febrero', 'Marzo', 'Abril', 'Mayo', 'Junio', 'Julio', 'Agosto', 'Septiembre', 'Octubre', 'Noviembre', 'Diciembre'];
+                    $dayOfWeek = $dayNames[$appointment->appointment_date->dayOfWeek];
+                    $day = $appointment->appointment_date->day;
+                    $month = $monthNames[$appointment->appointment_date->month];
+                    $year = $appointment->appointment_date->year;
+                @endphp
                 <h2 style="color: #28a745; margin: 10px 0;">
-                    {{ $appointment->appointment_date->format('l, d \d\e F \d\e Y') }}
+                    {{ $dayOfWeek }}, {{ $day }} de {{ $month }} de {{ $year }}
                 </h2>
                 <h2 style="color: #28a745; margin: 10px 0;">
                     {{ $appointment->appointment_date->format('H:i') }} hrs
                 </h2>
+                @else
+                <h2 style="color: #28a745; margin: 10px 0;">
+                    Fecha y hora por confirmar
+                </h2>
+                @endif
             </div>
 
             <div class="appointment-details">

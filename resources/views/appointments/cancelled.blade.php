@@ -43,9 +43,9 @@
 
             <div style="margin: 30px 0;">
                 <h3>¿Necesitas agendar una nueva cita?</h3>
-                <p>Puedes solicitar una nueva cita a través de nuestra aplicación móvil cuando lo necesites.</p>
+                <p>Puedes solicitar una nueva cita a través de nuestra pagina web cuando lo necesites.</p>
 
-                <a href="#" class="btn">📱 Descargar App</a>
+                <a href="#" class="btn">GarageMeet</a>
 
                 <p style="margin-top: 20px;">
                     <strong>O contacta directamente al taller:</strong><br>

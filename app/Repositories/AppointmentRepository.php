@@ -31,27 +31,9 @@ class AppointmentRepository implements AppointmentRepositoryInterface
         return $appointment->delete();
     }
 
-    public function getAllByWorkshop(int $workshopId, array $filters = []): array
+    public function getAllByWorkshop(int $workshopId): array
     {
         $query = Appointments::byWorkshop($workshopId)->with('workshop');
-
-        // Filtros opcionales
-        if (isset($filters['status'])) {
-            $query->where('status', $filters['status']);
-        }
-
-        if (isset($filters['date_from'])) {
-            $query->whereDate('appointment_date', '>=', $filters['date_from']);
-        }
-
-        if (isset($filters['date_to'])) {
-            $query->whereDate('appointment_date', '<=', $filters['date_to']);
-        }
-
-        if (isset($filters['created_by'])) {
-            $query->where('created_by', $filters['created_by']);
-        }
-
         return $query->orderBy('created_at', 'desc')->get()->toArray();
     }
 

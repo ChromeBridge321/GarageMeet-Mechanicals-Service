@@ -57,21 +57,23 @@ class AppointmentController extends Controller
     }
 
     /**
-     * Obtener todas las citas de un taller
+     * Obtener todas las citas de un taller específico
      */
-    public function getAll(Request $request)
+    public function getAllByWorkshop(Request $request)
     {
         try {
             $workshopId = $request->mechanical_workshops_id;
-            $filters = $request->only(['status', 'date_from', 'date_to', 'created_by']);
-
-            $appointments = $this->appointmentService->getAllAppointments($workshopId, $filters);
+            $appointments = $this->appointmentService->getAllAppointments($workshopId);
 
             return ApiResponse::success('Citas obtenidas exitosamente', $appointments);
         } catch (\Exception $e) {
             return ApiResponse::error('Error al obtener las citas', $e->getMessage());
         }
     }
+
+    /**
+     * Obtener todas las citas de un taller
+     */
 
     /**
      * Obtener cita por ID

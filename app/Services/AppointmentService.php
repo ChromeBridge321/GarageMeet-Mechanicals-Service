@@ -56,10 +56,12 @@ class AppointmentService implements AppointmentServiceInterface
 
             $appointmentId = $data['appointment_id'];
 
+            // Combinar fecha y hora en un solo campo datetime
+            $appointmentDateTime = $data['confirmed_date'] . ' ' . $data['confirmed_time'];
+
             // Actualizar la cita con fecha y status confirmado
             $updateData = [
-                'confirmed_date' => $data['confirmed_date'],
-                'confirmed_time' => $data['confirmed_time'],
+                'appointment_date' => $appointmentDateTime,
                 'status' => 'confirmed',
                 'notes' => $data['notes'] ?? null
             ];
@@ -118,9 +120,9 @@ class AppointmentService implements AppointmentServiceInterface
         });
     }
 
-    public function getAllAppointments(int $workshopId, array $filters = []): array
+    public function getAllAppointments(int $workshopId): array
     {
-        return $this->repository->getAllByWorkshop($workshopId, $filters);
+        return $this->repository->getAllByWorkshop($workshopId);
     }
 
     public function getAppointmentById(int $id): ?array

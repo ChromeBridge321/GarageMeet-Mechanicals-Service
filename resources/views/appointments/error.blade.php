@@ -30,7 +30,7 @@
             <p>Si este error persiste, por favor contacta directamente al taller o intenta agendar una nueva cita a través de la aplicación.</p>
 
             <div style="margin: 30px 0;">
-                <a href="#" class="btn">📱 Abrir App</a>
+                <a href="#" class="btn">GarageMeet</a>
                 <a href="mailto:support@garagemeet.com" class="btn">📧 Contactar Soporte</a>
             </div>
         </div>
