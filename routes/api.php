@@ -108,6 +108,10 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('all', [PiecesController::class, 'getAll']);
     });
 
+    Route::prefix('sales')->group(function () {
+        Route::get('all', [SaleController::class, 'getAll']);
+    });
+
 
 
     // Rutas que requieren suscripción activa

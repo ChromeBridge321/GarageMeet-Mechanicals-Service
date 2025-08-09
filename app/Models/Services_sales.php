@@ -32,4 +32,9 @@ class Services_sales extends Model
     {
         return $this->hasMany(Pieces_sales::class, 'services_sales_id');
     }
+
+    public function services()
+    {
+        return $this->hasMany(Services_by_sales::class, 'services_sales_id');
+    }
 }

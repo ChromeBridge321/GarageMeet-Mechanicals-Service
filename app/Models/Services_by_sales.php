@@ -12,4 +12,14 @@ class Services_by_sales extends Model
         'services_sales_id',
     ];
     public $timestamps = false;
+
+    public function serviceSale()
+    {
+        return $this->belongsTo(Services_sales::class, 'services_sales_id');
+    }
+
+    public function service()
+    {
+        return $this->belongsTo(Services::class, 'services_id');
+    }
 }

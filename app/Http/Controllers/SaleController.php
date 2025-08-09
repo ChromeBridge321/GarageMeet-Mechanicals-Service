@@ -58,8 +58,9 @@ class SaleController extends Controller
         }
     }
 
-    public function getAll($workshopId)
+    public function getAll(Request $request)
     {
+        $workshopId = $request->mechanical_workshops_id;
         return $this->salesService->getAllSales($workshopId);
     }
 
