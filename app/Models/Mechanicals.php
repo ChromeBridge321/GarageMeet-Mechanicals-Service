@@ -36,4 +36,9 @@ class Mechanicals extends Model
         return $this->hasMany(Payment_types::class, 'mechanical_workshops_id', 'id');
     }
 
+    public function servicesSales()
+    {
+        return $this->hasMany(Services_sales::class, 'mechanical_workshops_id', 'id');
+    }
+
 }

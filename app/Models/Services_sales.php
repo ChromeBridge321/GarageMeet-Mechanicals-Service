@@ -12,10 +12,24 @@ class Services_sales extends Model
         'payment_types_id',
         'employees_id',
         'mechanical_workshops_id',
-        'clients_id',
-        'pieces_id',
+        'vehicles_id',
         'date',
         'price',
     ];
     public $timestamps = false;
+
+    public function mechanicals()
+    {
+        return $this->belongsTo(Mechanicals::class, 'mechanical_workshops_id');
+    }
+
+    public function vehicles()
+    {
+        return $this->belongsTo(Vehicles::class, 'vehicles_id');
+    }
+
+    public function pieces()
+    {
+        return $this->hasMany(Pieces_sales::class, 'services_sales_id');
+    }
 }

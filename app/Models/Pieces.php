@@ -11,7 +11,7 @@ class Pieces extends Model
     protected $fillable = [
         'name',
         'mechanical_workshops_id',
-        'price',
+        'price'
     ];
     public $timestamps = false;
 }

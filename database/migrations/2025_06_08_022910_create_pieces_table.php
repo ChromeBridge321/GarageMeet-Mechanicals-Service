@@ -15,11 +15,11 @@ return new class extends Migration
             $table->id('pieces_id');
             $table->string('name', 60);
             $table->unsignedBigInteger('mechanical_workshops_id');
+            $table->float('price', 8, 2);
             $table->foreign('mechanical_workshops_id')
                 ->references('id')
                 ->on('mechanical_workshops')
                 ->onDelete('cascade');
-
         });
     }
 

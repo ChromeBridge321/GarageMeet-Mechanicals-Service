@@ -8,6 +8,8 @@ use App\Http\Controllers\EmployeesController;
 use App\Http\Controllers\ClientsController;
 use App\Http\Controllers\PaymentMethodController;
 use App\Http\Controllers\PaymentTypesContoller;
+use App\Http\Controllers\PiecesController;
+use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\VehiclesController;
@@ -16,7 +18,6 @@ use Illuminate\Support\Facades\Route;
 Route::prefix('cities')->group(function () {
     Route::get('findByName/{name}', [CitiesController::class, 'findByName']);
 });
-
 
 Route::prefix('auth')->group(function () {
     Route::post('register', [AuthController::class, 'register']);
@@ -103,6 +104,12 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('all', [PaymentTypesContoller::class, 'getAll']);
     });
 
+    Route::prefix('pieces')->group(function () {
+        Route::get('all', [PiecesController::class, 'getAll']);
+    });
+
+
+
     // Rutas que requieren suscripción activa
     Route::middleware(['check.subscription'])->group(function () {
         // Aquí van todas las rutas del dashboard que requieren suscripción
@@ -121,6 +128,14 @@ Route::middleware(['auth:api'])->group(function () {
                 Route::get('getById', [PaymentTypesContoller::class, 'getById']);
                 Route::put('update', [PaymentTypesContoller::class, 'update']);
                 Route::delete('delete', [PaymentTypesContoller::class, 'delete']);
+            });
+
+            // Piezas del taller
+            Route::prefix('pieces')->group(function () {
+                Route::post('create', [PiecesController::class, 'create']);
+                Route::get('getById', [PiecesController::class, 'getById']);
+                Route::put('update', [PiecesController::class, 'update']);
+                Route::delete('delete', [PiecesController::class, 'delete']);
             });
 
             Route::prefix('positions')->group(function () {
@@ -144,6 +159,14 @@ Route::middleware(['auth:api'])->group(function () {
                     Route::post('create', [ClientsController::class, 'create']);
                     Route::put('update', [ClientsController::class, 'update']);
                     Route::delete('delete', [ClientsController::class, 'delete']);
+                });
+            });
+            Route::prefix('sales')->group(function () {
+                Route::middleware('api.auth')->group(function () {
+                    Route::post('create', [SaleController::class, 'create']);
+                    Route::put('update', [SaleController::class, 'update']);
+                    Route::delete('delete', [SaleController::class, 'delete']);
+                    Route::get('getById', [SaleController::class, 'getById']);
                 });
             });
         });
