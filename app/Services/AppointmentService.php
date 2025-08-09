@@ -40,24 +40,32 @@ class AppointmentService implements AppointmentServiceInterface
             $this->sendNotificationToWorkshop($appointment, 'new_request');
 
             // Enviar notificación al cliente
-            $this->sendNotificationToClient($appointment, 'new_request');
+            $this->sendNotificationToClient($appointment, 'new_request_client');
 
             return $appointment;
         });
     }
 
-    public function confirmAppointment(int $id, array $data): array
+    public function confirmAppointment(array $data): array
     {
-        return DB::transaction(function () use ($id, $data) {
+        return DB::transaction(function () use ($data) {
+            // Validar que el ID de la cita esté presente
+            if (!isset($data['appointment_id'])) {
+                throw new \InvalidArgumentException('El ID de la cita es requerido');
+            }
+
+            $appointmentId = $data['appointment_id'];
+
             // Actualizar la cita con fecha y status confirmado
             $updateData = [
-                'appointment_date' => $data['appointment_date'],
+                'confirmed_date' => $data['confirmed_date'],
+                'confirmed_time' => $data['confirmed_time'],
                 'status' => 'confirmed',
                 'notes' => $data['notes'] ?? null
             ];
 
-            $this->repository->update($id, $updateData);
-            $appointment = $this->repository->findById($id);
+            $this->repository->update($appointmentId, $updateData);
+            $appointment = $this->repository->findById($appointmentId);
 
             // Enviar notificación al cliente
             $this->sendNotificationToClient($appointment, 'confirmed');

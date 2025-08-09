@@ -43,14 +43,12 @@ class AppointmentController extends Controller
         try {
             $data = $request->validate([
                 'appointment_id' => 'required|exists:appointments,appointment_id',
-                'appointment_date' => 'required|date|after:now',
+                'confirmed_date' => 'required|date|after:now',
+                'confirmed_time' => 'required|date_format:H:i:s',
                 'notes' => 'sometimes|string|max:1000'
             ]);
 
-            $appointment = $this->appointmentService->confirmAppointment(
-                $data['appointment_id'],
-                $data
-            );
+            $appointment = $this->appointmentService->confirmAppointment($data);
 
             return ApiResponse::success('Cita confirmada exitosamente', $appointment);
         } catch (\Exception $e) {

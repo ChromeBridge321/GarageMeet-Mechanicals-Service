@@ -24,14 +24,14 @@
         </div>
 
         <div class="content">
-            <p><strong>¡Hola!</strong></p>
+            <p><strong>¡Hola {{ $appointment->client_name }}!</strong></p>
 
-            <p>Has recibido una nueva solicitud de cita a través de la aplicación web.</p>
+            <p>Has hecho una nueva solicitud de cita a través del sistema de GarageMeet.</p>
 
             <div class="appointment-details">
-                <h3>📋 Detalles de la Solicitud</h3>
-                <p><strong>Cliente:</strong> {{ $appointment->client_name }}</p>
-                <p><strong>Email:</strong> {{ $appointment->client_email }}</p>
+                <h3>📋 Detalles de tu Solicitud</h3>
+                <p><strong>Nombre:</strong> {{ $appointment->client_name }}</p>
+                <p><strong>Correo:</strong> {{ $appointment->client_email }}</p>
                 <p><strong>Teléfono:</strong> {{ $appointment->client_phone }}</p>
                 <p><strong>Descripción del problema:</strong></p>
                 <div style="background-color: #f8f9fa; padding: 10px; border-radius: 3px; margin: 10px 0;">
@@ -41,20 +41,6 @@
                     <span class="status">⏳ Pendiente de confirmación</span>
                 </p>
                 <p><strong>Solicitada el:</strong> {{ $appointment->created_at->format('d/m/Y H:i') }}</p>
-            </div>
-
-            <div class="alert">
-                <strong>💡 Próximos pasos:</strong><br>
-                1. Revisa la solicitud<br>
-                2. Asigna una fecha y hora disponible<br>
-                3. Confirma la cita desde tu dashboard<br>
-                4. El cliente será notificado automáticamente
-            </div>
-
-            <div style="text-align: center; margin: 20px 0;">
-                <a href="{{ url('/dashboard/appointments') }}" class="btn">
-                    🔧 Ir al Dashboard
-                </a>
             </div>
         </div>
 

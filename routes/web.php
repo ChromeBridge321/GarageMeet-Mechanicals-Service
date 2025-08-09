@@ -5,7 +5,7 @@ use App\Http\Controllers\AppointmentController;
 use App\Http\Controllers\TestController;
 
 Route::get('/', function () {
-    return view('welcome');
+    return view('emails.appointment-new-request-client');
 });
 
 // Ruta pública para cancelar citas por token

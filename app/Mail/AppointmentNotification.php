@@ -67,6 +67,7 @@ class AppointmentNotification extends Mailable
             'confirmed' => 'emails.appointment-confirmed',
             'cancelled' => 'emails.appointment-cancelled',
             'reminder' => 'emails.appointment-reminder',
+            'new_request_client' => 'emails.appointment-new-request-client',
             default => 'emails.appointment-notification'
         };
     }
