@@ -13,6 +13,7 @@ use App\Http\Controllers\SaleController;
 use App\Http\Controllers\ServicesController;
 use App\Http\Controllers\SubscriptionController;
 use App\Http\Controllers\VehiclesController;
+use App\Http\Controllers\AppointmentController;
 use Illuminate\Support\Facades\Route;
 
 Route::prefix('cities')->group(function () {
@@ -112,7 +113,10 @@ Route::middleware(['auth:api'])->group(function () {
         Route::get('all', [SaleController::class, 'getAll']);
     });
 
-
+    // Rutas públicas de citas (para la app móvil)
+    Route::prefix('appointments')->group(function () {
+        Route::post('request', [AppointmentController::class, 'createRequest']);
+    });
 
     // Rutas que requieren suscripción activa
     Route::middleware(['check.subscription'])->group(function () {
@@ -171,6 +175,18 @@ Route::middleware(['auth:api'])->group(function () {
                     Route::put('update', [SaleController::class, 'update']);
                     Route::delete('delete', [SaleController::class, 'delete']);
                     Route::get('getById', [SaleController::class, 'getById']);
+                });
+            });
+
+            // Gestión de citas desde el dashboard
+            Route::prefix('appointments')->group(function () {
+                Route::middleware('api.auth')->group(function () {
+                    Route::get('all', [AppointmentController::class, 'getAll']);
+                    Route::get('getById', [AppointmentController::class, 'getById']);
+                    Route::post('confirm', [AppointmentController::class, 'confirm']);
+                    Route::post('cancel', [AppointmentController::class, 'cancel']);
+                    Route::post('send-reminder', [AppointmentController::class, 'sendReminder']);
+                    Route::post('mark-completed', [AppointmentController::class, 'markAsCompleted']);
                 });
             });
         });

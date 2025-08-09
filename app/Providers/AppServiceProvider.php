@@ -11,7 +11,16 @@ class AppServiceProvider extends ServiceProvider
      */
     public function register(): void
     {
-        //
+        // Bind appointment interfaces
+        $this->app->bind(
+            \App\Contracts\Repositories\AppointmentRepositoryInterface::class,
+            \App\Repositories\AppointmentRepository::class
+        );
+
+        $this->app->bind(
+            \App\Contracts\Services\AppointmentServiceInterface::class,
+            \App\Services\AppointmentService::class
+        );
     }
 
     /**
